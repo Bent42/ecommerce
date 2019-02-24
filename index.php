@@ -1,6 +1,7 @@
 <?php 
 
 session_start();
+
 require_once("vendor/autoload.php");
 
 use \Slim\Slim;
@@ -11,6 +12,7 @@ use \Hcode\Model\User;
 $app = new Slim;
 
 $app->config('debug', true);
+
 
 $app->get('/', function() {
 	$page = new Page();
@@ -58,15 +60,19 @@ $app->get('/admin/logout', function(){
 
 });
 
-$app->get('/admin/users', function(){
+$app->get("/admin/users", function(){
 
 	User::verifyLogin();
 
+	$users = User::listAll();
+
+	var_dump($users);
+
 	$page = new PageAdmin();
 	
-	$page->setTpl("users");
-
-
+	$page->setTpl("users", array(
+		"users"=>$users
+	));
 });
 
 $app->get('/admin/users/create', function(){
@@ -96,12 +102,6 @@ $app->post('/admin/users/create', function(){
 });
 
 $app->post('/admin/users/:iduser', function($iduser){
-
-	User::verifyLogin();
-
-});
-
-$app->delete('/admin/users/:iduser', function($iduser){
 
 	User::verifyLogin();
 
