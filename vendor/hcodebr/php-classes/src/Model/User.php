@@ -78,7 +78,6 @@ class User extends Model{
 		$sql = new Sql();
      
         $results = $sql->select("SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson) WHERE a.iduser =:iduser;", array(
-
             ":iduser"=>$iduser
         ));
      
@@ -138,7 +137,7 @@ public static function getForgot($email,$inadmin=true){
                 ":email"=>$email
             ));
             if (count($results)===0) {
-                # code...
+                
                 throw new \Exception("Não foi possivel recuperar a senha.");
             }else {
                 $data = $results[0];
@@ -147,7 +146,7 @@ public static function getForgot($email,$inadmin=true){
                     ":desip"=>$_SERVER["REMOTE_ADDR"]
                 ));
                 if (count($results2)===0) {
-                    # code...
+                    
                     throw new \Exception("Não foi possivel recuperar a senha.");
                 }else{
                     $dataRecovery = $results2[0];
@@ -157,7 +156,6 @@ public static function getForgot($email,$inadmin=true){
                     
 
                     if ($inadmin ===true) {
-                        # code...
                     $link = "http://www.hcodecommerce.com.br/admin/forgot/reset?code=$result";
                         
                     }else{
