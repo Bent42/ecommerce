@@ -113,16 +113,18 @@ class Category extends Model{
         ));
 
     }
+
     public function removeProduct(Product $product){
 
         $sql = new Sql();
 
-        $sql->query("DELETE FROM tb_productscategories WHERE idcategory= :idcategory AND idproduct = :idproduct)", array(
+        $sql->query("DELETE FROM tb_productscategories WHERE idcategory = :idcategory AND idproduct = :idproduct", array(
             ":idcategory"=>$this->getidcategory(),
             ":idproduct"=>$product->getidproduct()
         ));
 
-    }	
+    }
+
 }
 
  ?>
