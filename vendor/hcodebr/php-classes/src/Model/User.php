@@ -10,7 +10,7 @@ class User extends Model{
 
 	const SESSION = "User";
 	const SECRET = "HcodePhp7_Secret";
-    
+
 
     public static function getFromSession(){
 
@@ -86,7 +86,8 @@ class User extends Model{
 
 	public static function verifyLogin($inadmin = true){
 
-		if (User::checkLogin()) {
+		if (!User::checkLogin($inadmin)) {
+
 			header("Location: /admin/login");
 			exit;
 		}
