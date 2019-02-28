@@ -113,6 +113,7 @@ class Product extends Model{
             $image = imagecreatefromjpeg($file["tmp_name"]);
                 break;
             case "png":
+            case "PNG":
             $image = imagecreatefrompng($file["tmp_name"]);             
                 # code...
                 break;
