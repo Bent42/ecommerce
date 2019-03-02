@@ -30,7 +30,7 @@ class User extends Model{
 
 		$sql = new Sql();
 
-		$results = $sql->select("SELECT * FROM tb_users where deslogin = :LOGIN", array(
+		$results = $sql->select("SELECT * FROM tb_users a JOIN tb_persons b on a.idperson = b.idperson  where deslogin = :LOGIN", array(
 			":LOGIN"=>$login
 		));
 
@@ -45,7 +45,10 @@ class User extends Model{
 		if(password_verify($password, $data["despassword"]) === true){
 
 			$user = new User();
-			$user->setData($data);
+
+            $data['desperson'] = utf8_encode($data['desperson']);
+			
+            $user->setData($data);
 
 			$_SESSION[User::SESSION] = $user->getValues();
 			
@@ -87,9 +90,12 @@ class User extends Model{
 	public static function verifyLogin($inadmin = true){
 
 		if (!User::checkLogin($inadmin)) {
-
-			header("Location: /admin/login");
-			exit;
+            if ($inadmin) {
+                header("Location: /admin/login");
+            }else{
+                header("Location: /login");
+            }
+            exit;
 		}
 	}
 
@@ -115,7 +121,9 @@ class User extends Model{
         ));
      
      $data = $results[0];
-     
+
+     $data['desperson'] = utf8_encode($data['desperson']);
+
      $this->setData($data);
      
      }
@@ -125,7 +133,7 @@ class User extends Model{
      	$sql = new Sql();
 
      	$results = $sql->select("CALL sp_users_save(:desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)",array(
-     		"desperson"=>$this->getdesperson(),
+     		"desperson"=>utf8_decode($this->getdesperson()),
      		"deslogin"=>$this->getdeslogin(),
      		"despassword"=>User::getPasswordHash($this->getdespassword()),
      		"desemail"=>$this->getdesemail(),
@@ -143,13 +151,14 @@ class User extends Model{
 
      	$results = $sql->select("CALL sp_usersupdate_save(:iduser, :desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)",array(
      		"iduser"=>$this->getiduser(),
-     		"desperson"=>$this->getdesperson(),
+     		"desperson"=>utf8_decode($this->getdesperson()),
      		"deslogin"=>$this->getdeslogin(),
-     		"despassword"=>$this->getdespassword(),
+     		"despassword"=>User::getPasswordHash($this->getdespassword()),
      		"desemail"=>$this->getdesemail(),
      		":nrphone"=>$this->getnrphone(),
      		":inadmin"=>$this->getinadmin()
      	));
+
 
      	$this->setData($results[0]);
      }
@@ -243,6 +252,29 @@ public static function getForgot($email, $inadmin=true){
             return password_hash($password, PASSWORD_DEFAULT, [
             'cost'=>12
         ]);
+    }
+
+    public static function setMsgError($msg){
+
+        $_SESSION[Cart::SESSION_ERROR] = (string)$msg;
+
+    }   
+
+    public static function getMsgError(){
+
+
+        $msg =  (isset($_SESSION[Cart::SESSION_ERROR])) ? $_SESSION[Cart::SESSION_ERROR] : "";
+
+        Cart::clearMsgError();
+
+        return $msg;
+    
+    }
+
+    public static function clearMsgError(){
+
+        $_SESSION[Cart::SESSION_ERROR] = NULL;
+
     }
 
 	
