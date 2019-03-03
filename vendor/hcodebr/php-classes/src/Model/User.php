@@ -12,6 +12,7 @@ class User extends Model{
 	const SECRET = "HcodePhp7_Secret";
     const ERROR_REGISTER = "UserErrorRegister";
     const ERROR = "UserError";
+    const SUCCESS = "UserSuccess";
 
 
     public static function getFromSession(){
@@ -160,7 +161,7 @@ class User extends Model{
      		"iduser"=>$this->getiduser(),
      		"desperson"=>utf8_decode($this->getdesperson()),
      		"deslogin"=>$this->getdeslogin(),
-     		"despassword"=>User::getPasswordHash($this->getdespassword()),
+     		"despassword"=>$this->getdespassword(),
      		"desemail"=>$this->getdesemail(),
      		":nrphone"=>$this->getnrphone(),
      		":inadmin"=>$this->getinadmin()
@@ -301,7 +302,7 @@ public static function validForgotDecrypt($result){
     public static function getMsgError(){
 
 
-        $msg =  (isset($_SESSION[User::ERROR])) ? $_SESSION[User::ERROR] : "";
+        $msg =  (isset($_SESSION[User::ERROR])) && $_SESSION[User::ERROR] ? $_SESSION[User::ERROR] : "";
 
         User::clearMsgError();
 
@@ -345,6 +346,29 @@ public static function validForgotDecrypt($result){
         ));
 
         return (count($results)>0);
+
+    }
+
+    public static function setMsgSuccess($msg){
+
+        $_SESSION[User::SUCCESS] = (string)$msg;
+
+    }   
+
+    public static function getMsgSuccess(){
+
+
+        $msg =  (isset($_SESSION[User::SUCCESS])) && $_SESSION[User::SUCCESS] ? $_SESSION[User::SUCCESS] : "";
+
+        User::clearMsgSuccess();
+
+        return $msg;
+    
+    }
+
+    public static function clearMsgSuccess(){
+
+        $_SESSION[User::SUCCESS] = NULL;
 
     }
 	
