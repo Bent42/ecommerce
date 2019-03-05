@@ -475,10 +475,17 @@ $app->post('/checkout', function(){
 
 	$order->save();
 
-	header("Location: /order/".$order->getidorder());
+	header("Location: /order/".$order->getidorder()."/clearcart");
 	exit;
 
 });
+
+$app->get("/order/:idorder/clearcart", function($idorder){
+    Cart::removeSession();
+    header("Location: /order/{$idorder}");
+    exit;
+});
+
 
 $app->get('/order/:idorder', function($idorder){
 
