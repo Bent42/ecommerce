@@ -395,6 +395,7 @@ $app->get('/checkout', function(){
 	} 
 
 	if (!$address->getdesaddress()) $address->setdesaddress('');
+	if (!$address->getdesnumber()) $address->setdesnumber('');
 	if (!$address->getdescomplement()) $address->setdescomplement('');
 	if (!$address->getdesdistrict()) $address->setdesdistrict('');
 	if (!$address->getdesstate()) $address->setdesstate('');
@@ -417,32 +418,37 @@ $app->post('/checkout', function(){
 
 	User::verifyLogin(false);
 
-	if (!isset($_POST['zipcode']) || $_POST['zipcode'] ==  '') {
+	if (!isset($_POST['zipcode']) || $_POST['zipcode'] ===  '') {
 		Address::setMsgError("Informe o CEP.");
 		header("Location: /checkout");
 		exit;
 	}
-	if (!isset($_POST['desaddress']) || $_POST['desaddress'] == '') {
+	if (!isset($_POST['desaddress']) || $_POST['desaddress'] === '') {
 		Address::setMsgError("Informe o endereço.");
 		header("Location: /checkout");
 		exit;
 	}
-	if (!isset($_POST['desdistrict']) || $_POST['desdistrict'] == '') {
+	if (!isset($_POST['desnumber']) || $_POST['desnumber'] === '') {
+		Address::setMsgError("Informe o numero da casa.");
+		header("Location: /checkout");
+		exit;
+	}
+	if (!isset($_POST['desdistrict']) || $_POST['desdistrict'] === '') {
 		Address::setMsgError("Informe o bairro.");
 		header("Location: /checkout");
 		exit;
 	}
-	if (!isset($_POST['desstate']) || $_POST['desstate'] == '') {
+	if (!isset($_POST['desstate']) || $_POST['desstate'] === '') {
 		Address::setMsgError("Informe o estado.");
 		header("Location: /checkout");
 		exit;
 	}
-	if (!isset($_POST['descity']) || $_POST['descity'] == '') {
+	if (!isset($_POST['descity']) || $_POST['descity'] === '') {
 		Address::setMsgError("Informe a cidade.");
 		header("Location: /checkout");
 		exit;
 	}
-	if (!isset($_POST['descountry']) || $_POST['descountry'] == '') {
+	if (!isset($_POST['descountry']) || $_POST['descountry'] === '') {
 		Address::setMsgError("Informe o país.");
 		header("Location: /checkout");
 		exit;
