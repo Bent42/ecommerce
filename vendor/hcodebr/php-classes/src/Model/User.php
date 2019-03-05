@@ -316,6 +316,7 @@ public static function validForgotDecrypt($result){
 
     }
 
+
     public static function setErrorRegister($msg){
 
         $_SESSION[User::ERROR_REGISTER] = (string)$msg;
