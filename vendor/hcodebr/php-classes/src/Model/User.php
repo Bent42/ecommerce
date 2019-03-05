@@ -371,6 +371,18 @@ public static function validForgotDecrypt($result){
         $_SESSION[User::SUCCESS] = NULL;
 
     }
+
+    public function getOrders(){
+
+        $sql = new Sql();
+
+        $results = $sql->select("SELECT * FROM tb_orders a JOIN tb_ordersstatus b USING(idstatus) JOIN tb_carts c USING(idcart) JOIN tb_users d ON d.iduser = a.iduser JOIN tb_addresses e USING(idaddress) JOIN tb_persons f ON f.idperson = d.idperson WHERE a.iduser = :iduser", array(
+            ":iduser"=>$this->getiduser()
+        ));
+
+        return $results;
+
+    }
 	
 }
 
